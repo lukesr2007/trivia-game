@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!--
+      The viewport meta is required on mobile: without it, phones pretend to be
+      980px wide and the text becomes unreadable.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      A theme-color tells mobile browsers (and browser tabs on desktop) which
+      colour to paint around the page. It should match the app background so
+      there is no white flash before the CSS loads.
+    -->
+    <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+
+    <meta
+      name="description"
+      content="TriviaQuest — a quiz app built with React and the Open Trivia DB API. Choose a category, difficulty and length, race the clock, and review your answers."
+    />
+
+    <title>TriviaQuest · Open Trivia DB quiz</title>
+
+    <!--
+      Theme flash prevention.
+
+      The React app sets data-theme once it mounts, but that happens AFTER the
+      browser has already painted the page — which would show a flash of the
+      wrong theme. This tiny inline script runs before that first paint and
+      applies the saved (or system) theme immediately. It has to be inline and in
+      <head>: an external file would be fetched too late to help.
+    -->
+    <script>
+      ;(function () {
+        try {
+          var saved = localStorage.getItem('otdb.theme')
+          var prefersDark =
+            saved === 'dark' ||
+            (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)
+          document.documentElement.dataset.theme = prefersDark ? 'dark' : 'light'
+        } catch (error) {
+          document.documentElement.dataset.theme = 'dark' // private mode: just pick one
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <!--
+      React renders INSIDE this element. It is empty in the HTML because React
+      fills it in at runtime — that is why main.jsx looks for #root.
+    -->
+    <div id="root"></div>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
